@@ -2,7 +2,7 @@
 """
 # File ....: hbi-axe.py
 # Date ....: 05.25.2021
-# Author ..: Waldirio M Pinheiro <waldirio@gmail.com>
+# Author ..: Waldirio M Pinheiro <waldirio@redhat.com> / <waldirio@gmail.com>
 # Purpose .:
 #   This script will collect the information from cloud.redhat.com/Inventory and
 #   will put in a nice/simple view the whole information. At this moment, the
