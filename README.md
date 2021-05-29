@@ -12,7 +12,7 @@ Those information will be very useful during the troubleshooting process.
 Let's start.
 
 ## ## Start Attention Point
-If you have python 3 on your system, virtual environment is not required, instead you can just download the script and use it. Simple like that! :-)
+If you have python 3 and two additional packages on your system, `python3-urllib3` and `python3-requests`, virtual environment is not required, instead you can just download the script and use it. Simple like that! :-)
 
 ```
 # python <tab> <tab>
@@ -24,9 +24,15 @@ Here we can see we have python 2 and python 3, and when checking the version
 # python3 --version
 Python 3.6.8
 ```
+and here we can see the packages
+```
+# rpm -qa | grep -E '(python3-urllib3|python3-requests)'
+python3-urllib3-1.25.11-1.el7pc.noarch
+python3-requests-2.24.0-1.el7pc.noarch
+```
+Note. On this way, you are good to go.
 
 That said, let's proceed
-
 ```
 # wget https://raw.githubusercontent.com/waldirio/hbi-axe/master/hbi-axe.py
 # python3 hbi-axe.py
