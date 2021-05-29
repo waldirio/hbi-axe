@@ -33,10 +33,10 @@ diff_display_name_fqdn_list = []
 last_seen_list = []
 hyper_list = []
 
-DUPLICATE_ENTRIES_LOG = "/tmp/hbi_duplicate_entries.log"
-DIFFERENT_NAMES_LOG = "/tmp/hbi_different_names.log"
-LAST_SEEN_LOG = "/tmp/hbi_last_seen.log"
-HYPERVISOR_LIST_LOG = "/tmp/hbi_hypervisor_with_guest_list.log"
+DUPLICATE_ENTRIES_LOG = "/tmp/hbi_duplicate_entries.csv"
+DIFFERENT_NAMES_LOG = "/tmp/hbi_different_names.csv"
+LAST_SEEN_LOG = "/tmp/hbi_last_seen.csv"
+HYPERVISOR_LIST_LOG = "/tmp/hbi_hypervisor_with_guest_list.csv"
 
 def process_info(login, password, server):
     """
