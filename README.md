@@ -11,6 +11,47 @@ Those information will be very useful during the troubleshooting process.
 
 Let's start.
 
+## ## Attention
+If you have python 3 on your system, virtual environment is not required, instead you can just download the script and use it. Simple like that! :-)
+
+```
+# python <tab> <tab>
+python                python2.7             python2.7-pasteurize  python3.6             python3-chardetect    
+python2               python2.7-futurize    python3               python3.6m            
+```
+Here we can see we have python 2 and python 3, and when checking the version
+```
+# python3 --version
+Python 3.6.8
+```
+
+That said, let's proceed
+
+```
+# wget https://raw.githubusercontent.com/waldirio/hbi-axe/master/hbi-axe.py
+# python3 hbi-axe.py
+```
+then you should be able to see something as below
+```
+# python3 hbi-axe.py 
+Must specify at least login.  See usage:
+Usage: hbi-axe.py [options]
+
+Options:
+  -h, --help            show this help message and exit
+  -l LOGIN, --login=LOGIN
+                        Login user
+  -p PASSWORD, --password=PASSWORD
+                        Password for specified user. Will prompt if omitted
+  -s SERVER, --server=SERVER
+                        FQDN of server - omit https://
+
+Example usage: ./hbi-axe.py -l username
+```
+
+If you face any kind of issue on the procedure above, please proceed with the steps below in order to create a virtual environment and execute it.
+## ## Attention
+
 First, let's create the virtual environment using python 3.6
 ```
 # python3.6 -m venv ~/.virtualenv/hbi-axe
