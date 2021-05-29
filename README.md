@@ -11,7 +11,7 @@ Those information will be very useful during the troubleshooting process.
 
 Let's start.
 
-## ## Attention
+## ## Start Attention Point
 If you have python 3 on your system, virtual environment is not required, instead you can just download the script and use it. Simple like that! :-)
 
 ```
@@ -50,7 +50,7 @@ Example usage: ./hbi-axe.py -l username
 ```
 
 If you face any kind of issue on the procedure above, please proceed with the steps below in order to create a virtual environment and execute it.
-## ## Attention
+## ## End Attention Point
 
 First, let's create the virtual environment using python 3.6
 ```
