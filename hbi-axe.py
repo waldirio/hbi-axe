@@ -155,6 +155,8 @@ def list_duplicated_entries():
     global duplicate_list
     local_temp_list = []
     aux = []
+    tmp_list = []
+    # aux_key = {}
 
     print("This process can spend some time ...")
     for elements in systemdata:
@@ -168,9 +170,11 @@ def list_duplicated_entries():
 
             if display_name == others_display_name and id != others_id:
                 # Adding duplicate to the list
-                local_temp_list.append(display_name)
                 local_temp_list.append(others_id)
+                local_temp_list.append(display_name)
                 local_temp_list.append(last_seen)
+                # aux_key = {'display_name': display_name}
+                # local_temp_list.append(aux_key)
 
                 aux.append(local_temp_list)
                 local_temp_list = []
@@ -179,16 +183,21 @@ def list_duplicated_entries():
 
     duplicate_list = [list(x) for x in set(tuple(x) for x in aux)]
     duplicate_list.sort()
+    tmp_list = sorted(duplicate_list, key=lambda x: x[1])
+    duplicate_list = tmp_list
+
+    # duplicate_list.sort(key='display_name')
 
     with open(DUPLICATE_ENTRIES_LOG, "w") as file_obj:
-        file_obj.write("fqdn,id,last_seen\n")
+        file_obj.write("id,display_name,last_seen\n")
 
         for b in duplicate_list:
-            fqdn = b[0]
-            id = b[1]
+            id = b[0]
+            display_name = b[1]
             last_seen = b[2]
 
-            file_obj.write(str(fqdn) + "," + str(id) + "," + last_seen + "\n")
+            # file_obj.write(str(display_name) + "," + str(id) + "," + last_seen + "\n")
+            file_obj.write(str(id) + "," + str(display_name) + "," + last_seen + "\n")
 
     print("The file {} was created with the duplicate entries of your environment.".format(DUPLICATE_ENTRIES_LOG))
     print("Were found {} duplicated entries on your environment.".format(len(duplicate_list)))
@@ -207,10 +216,13 @@ def list_diff_display_name_fqdn_entries():
         display_name = elements['display_name']
         fqdn = elements['fqdn']
         id = elements['id']
+        last_seen = elements['updated']
         if display_name != fqdn:
+            local_temp_list.append(id)
             local_temp_list.append(display_name)
             local_temp_list.append(fqdn)
-            local_temp_list.append(id)
+            # local_temp_list.append(id)
+            local_temp_list.append(last_seen)
             aux.append(local_temp_list)
             local_temp_list = []
 
@@ -218,15 +230,18 @@ def list_diff_display_name_fqdn_entries():
     diff_display_name_fqdn_list.sort()
 
     with open(DIFFERENT_NAMES_LOG, "w") as file_obj:
-        file_obj.write("display_name,fqdn,id\n")
+        # file_obj.write("display_name,fqdn,id\n")
+        file_obj.write("id,display_name,fqdn,last_seen\n")
         # print("fqdn,id,last_seen")
 
         for b in diff_display_name_fqdn_list:
-            display_name = b[0]
-            fqdn = b[1]
-            id = b[2]
+            id = b[0]
+            display_name = b[1]
+            fqdn = b[2]
+            last_seen = b[3]
 
-            file_obj.write(display_name + "," + str(fqdn) + "," + str(id) + "\n")
+            # file_obj.write(display_name + "," + str(fqdn) + "," + str(id) + "\n")
+            file_obj.write(str(id) + "," + str(display_name) + "," + str(fqdn) + "," + str(last_seen) + "\n")
 
     print("The file {} was created with the duplicate entries of your environment.".format(DIFFERENT_NAMES_LOG))
     print("Were found {} entries on your environment with different `display_name` and `hostname`.".format(len(diff_display_name_fqdn_list)))
@@ -263,14 +278,15 @@ def list_servers_last_seen():
     list_servers_last_seen.sort()
 
     with open(LAST_SEEN_LOG, "w") as file_obj:
-        file_obj.write("display_name,id,last_seen\n")
+        file_obj.write("id,display_name,last_seen\n")
 
         for b in list_servers_last_seen:
             display_name = b[0]
             id = b[1]
             last_seen = b[2]
 
-            file_obj.write(str(display_name) + "," + str(id) + "," + str(last_seen) + "\n")
+            # file_obj.write(str(display_name) + "," + str(id) + "," + str(last_seen) + "\n")
+            file_obj.write(str(id) + "," + str(display_name) + "," + str(last_seen) + "\n")
 
     print("The file {} was created with the old entries of your environment.".format(LAST_SEEN_LOG))
     print("Were found {} old entries on your environment.".format(len(list_servers_last_seen)))
