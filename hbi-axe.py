@@ -156,7 +156,7 @@ def list_duplicated_entries():
     local_temp_list = []
     aux = []
     tmp_list = []
-    aux_key = {}
+    # aux_key = {}
 
     print("This process can spend some time ...")
     for elements in systemdata:
