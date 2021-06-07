@@ -1,6 +1,13 @@
 # hbi-axe
 This app will help you to retrieve some information from cloud.redhat.com that are not available at this moment via customer portal.
 
+# Table of Contents
+1. [Available Features](#one1)
+2. [Running without virtual environment](#two)
+3. [Running with virtual environment](#tree)
+4. 
+
+
 It's possible to
 - List Duplicate Entries on HBI/Insights Inventory
 - List Servers with different `display_name` and `Hostname`
@@ -8,6 +15,7 @@ It's possible to
 - List all the Hypervisors with at least 1 guest
 
 Those information will be very useful during the troubleshooting process.
+
 
 Let's start.
 
@@ -271,3 +279,6 @@ I really hope this helps you.
 If you need anything else of if you are facing issues trying to use it, please let me know.
 
 waldirio@redhat.com / waldirio@gmail.com
+
+## One1
+test here

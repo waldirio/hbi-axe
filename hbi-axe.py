@@ -23,20 +23,23 @@ import getpass
 import json
 import sys
 from optparse import OptionParser
-import requests
 from time import sleep
 from datetime import datetime, timedelta
+import requests
 
 systemdata = []
 duplicate_list = []
 diff_display_name_fqdn_list = []
 last_seen_list = []
 hyper_list = []
+deleted_entries_list = []
 
 DUPLICATE_ENTRIES_LOG = "/tmp/hbi_duplicate_entries.csv"
 DIFFERENT_NAMES_LOG = "/tmp/hbi_different_names.csv"
 LAST_SEEN_LOG = "/tmp/hbi_last_seen.csv"
 HYPERVISOR_LIST_LOG = "/tmp/hbi_hypervisor_with_guest_list.csv"
+DELETED_ENTRIES_LOG = "/tmp/hbi_deleted_entries.csv"
+
 
 def process_info(login, password, server):
     """
@@ -59,7 +62,7 @@ def process_info(login, password, server):
     # For debugging purposes
     # while (page < 5):
         page += 1
-        url = "https://cloud.redhat.com/api/inventory/v1/hosts?page=" + str(page) + "&per_page=" + str(per_page)
+        url = "https://" + server + "/api/inventory/v1/hosts?page=" + str(page) + "&per_page=" + str(per_page)
         print(url)
         result = requests.get(url, auth=(login, password)).content
         jsonresult = json.loads(result)
@@ -156,8 +159,7 @@ def list_duplicated_entries():
     local_temp_list = []
     aux = []
     tmp_list = []
-    # aux_key = {}
-
+    
     print("This process can spend some time ...")
     for elements in systemdata:
         display_name = elements['display_name']
@@ -173,8 +175,6 @@ def list_duplicated_entries():
                 local_temp_list.append(others_id)
                 local_temp_list.append(display_name)
                 local_temp_list.append(last_seen)
-                # aux_key = {'display_name': display_name}
-                # local_temp_list.append(aux_key)
 
                 aux.append(local_temp_list)
                 local_temp_list = []
@@ -186,8 +186,6 @@ def list_duplicated_entries():
     tmp_list = sorted(duplicate_list, key=lambda x: x[1])
     duplicate_list = tmp_list
 
-    # duplicate_list.sort(key='display_name')
-
     with open(DUPLICATE_ENTRIES_LOG, "w") as file_obj:
         file_obj.write("id,display_name,last_seen\n")
 
@@ -196,7 +194,6 @@ def list_duplicated_entries():
             display_name = b[1]
             last_seen = b[2]
 
-            # file_obj.write(str(display_name) + "," + str(id) + "," + last_seen + "\n")
             file_obj.write(str(id) + "," + str(display_name) + "," + last_seen + "\n")
 
     print("The file {} was created with the duplicate entries of your environment.".format(DUPLICATE_ENTRIES_LOG))
@@ -221,7 +218,6 @@ def list_diff_display_name_fqdn_entries():
             local_temp_list.append(id)
             local_temp_list.append(display_name)
             local_temp_list.append(fqdn)
-            # local_temp_list.append(id)
             local_temp_list.append(last_seen)
             aux.append(local_temp_list)
             local_temp_list = []
@@ -230,9 +226,7 @@ def list_diff_display_name_fqdn_entries():
     diff_display_name_fqdn_list.sort()
 
     with open(DIFFERENT_NAMES_LOG, "w") as file_obj:
-        # file_obj.write("display_name,fqdn,id\n")
         file_obj.write("id,display_name,fqdn,last_seen\n")
-        # print("fqdn,id,last_seen")
 
         for b in diff_display_name_fqdn_list:
             id = b[0]
@@ -240,7 +234,6 @@ def list_diff_display_name_fqdn_entries():
             fqdn = b[2]
             last_seen = b[3]
 
-            # file_obj.write(display_name + "," + str(fqdn) + "," + str(id) + "\n")
             file_obj.write(str(id) + "," + str(display_name) + "," + str(fqdn) + "," + str(last_seen) + "\n")
 
     print("The file {} was created with the duplicate entries of your environment.".format(DIFFERENT_NAMES_LOG))
@@ -276,6 +269,8 @@ def list_servers_last_seen():
 
     list_servers_last_seen = [list(x) for x in set(tuple(x) for x in aux)]
     list_servers_last_seen.sort()
+    tmp_list = sorted(list_servers_last_seen, key=lambda x: x[2], reverse=True)
+    list_servers_last_seen = tmp_list
 
     with open(LAST_SEEN_LOG, "w") as file_obj:
         file_obj.write("id,display_name,last_seen\n")
@@ -285,13 +280,95 @@ def list_servers_last_seen():
             id = b[1]
             last_seen = b[2]
 
-            # file_obj.write(str(display_name) + "," + str(id) + "," + str(last_seen) + "\n")
             file_obj.write(str(id) + "," + str(display_name) + "," + str(last_seen) + "\n")
 
     print("The file {} was created with the old entries of your environment.".format(LAST_SEEN_LOG))
     print("Were found {} old entries on your environment.".format(len(list_servers_last_seen)))
     input("press any key to see the content of the file")
     system("less " + LAST_SEEN_LOG)
+    input("press any key to continue")
+
+
+def delete_api_call(uuid):
+    global deleted_entries_list
+    local_temp_list = []
+    url = 'https://' + server + '/api/inventory/v1/hosts/' + uuid
+    result = requests.delete(url, auth=(login, password))
+
+    removed = result.ok
+    status_code = result.status_code
+
+    local_temp_list.append(uuid)
+    local_temp_list.append(removed)
+    local_temp_list.append(status_code)
+    deleted_entries_list.append(local_temp_list)
+    local_temp_list = []
+
+
+def remove_hbi_entries():
+    to_be_removed_list = []
+    global deleted_entries_list
+    local_temp_list = []
+    print("## This section will allow you to remove some entries on cloud.redhat.com")
+    print("In order to proceed, you can inform the file which contain the entries that you would like to remove.")
+    print("Note, you can use the files generated by the previous entries, edit to keep the entries that you would")
+    print("like to remove. If you would like to remove all the entries from the file, just keep the file as is.")
+    input("press any key to continue")
+    print("")
+    print("Would you like to proceed now? (Y/N): ", end="")
+    opc = input()
+    if (opc == "Y") or (opc == "y"):
+        print("Please, type the file path: ", end="")
+        file_path = input()
+
+        system("less " + file_path)
+
+        try:
+            with open(file_path, "r") as file_ref:
+                print("Are you sure that you would like to proceed? (Y/N): ", end="")
+                opc = input()
+                if (opc == "Y") or (opc == "y"):
+
+                    local_temp_list.append("uuid")
+                    local_temp_list.append("Removed")
+                    local_temp_list.append("status_code")
+
+                    deleted_entries_list.append(local_temp_list)
+                    local_temp_list = []
+
+                    for line in file_ref:
+                        uuid = line.split(",")[0]
+                        if "id" not in uuid:
+                            to_be_removed_list.append(uuid)
+
+                    for uuid in to_be_removed_list:
+                        print("Removing the UUID: {}".format(uuid))
+                        delete_api_call(uuid)
+
+                    with open(DELETED_ENTRIES_LOG, "w") as file_obj:
+                        for b in deleted_entries_list:
+                            uuid = b[0]
+                            removed = b[1]
+                            status_code = b[2]
+
+                            file_obj.write(str(uuid) + "," + str(removed) + "," + str(status_code) + "\n")
+
+                    print("")
+                    print("The file {} was created with the deleted entries of your environment.".format(DELETED_ENTRIES_LOG))
+                    print("Were deleted {} entries from your environment.".format(len(deleted_entries_list) -1))
+                    input("press any key to see the content of the file")
+                    system("less " + DELETED_ENTRIES_LOG)
+                    # input("press any key to continue")
+
+                elif (opc == "N") or (opc == "n"):
+                    print("Ok, see you later!")
+
+        except FileNotFoundError as identifier:
+            print("File not found!")
+
+    elif (opc == "N") or (opc == "n"):
+        print("Ok, see you later!")
+
     input("press any key to continue")
 
 
@@ -317,7 +394,7 @@ def main_menu():
         print("3. List Servers with different `display_name` and `Hostname`")
         print("4. List Server with Last_Seen > X days")
         print("5. List all the Hypervisors with at least 1 guest")
-        print("")
+        print("9. Remove entries on cloud.redhat.com")
         print("")
         print("0. Exit")
         print("############################################################")
@@ -334,6 +411,8 @@ def main_menu():
             list_servers_last_seen()
         elif (opc == "5"):
             hypervisor_guests()
+        elif (opc == "9"):
+            remove_hbi_entries()
         elif (opc == "0"):
             print("Closing the application")
             sys.exit()
@@ -389,9 +468,3 @@ if __name__ == "__main__":
         sys.exit()
 
     main_menu()
-
-    # TODO
-    # print("3. Delete Duplicate Entries")
-    # print("5. Delete Entries where the 3 type of name differ")
-    # print("7. Delete Server with Last_Seen > X days")
-    # print("8. Generate a report with all the available fields")
