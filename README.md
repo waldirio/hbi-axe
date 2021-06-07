@@ -1,17 +1,28 @@
-# hbi-axe
+## hbi-axe
 This app will help you to retrieve some information from cloud.redhat.com that are not available at this moment via customer portal.
+
+# Table of Contents
+1. [Available Features](#available_feature)
+2. [Running without virtual environment](#running_without_venv)
+3. [Running with virtual environment](#running_with_venv)
+4. [Some Outputs](#some_outputs)
+5. [Contact Here](#contact_here)
+
+
+## available_feature
 
 It's possible to
 - List Duplicate Entries on HBI/Insights Inventory
 - List Servers with different `display_name` and `Hostname`
 - List Server with Last_Seen > X days
 - List all the Hypervisors with at least 1 guest
+- Remove entries on cloud.redhat.com
 
 Those information will be very useful during the troubleshooting process.
 
-Let's start.
+[back to top](#hbi-axe)
+## running_without_venv
 
-## ## Start Attention Point
 If you have python 3 and two additional packages on your system, `python3-urllib3` and `python3-requests`, virtual environment is not required, instead you can just download the script and use it. Simple like that! :-)
 
 ```
@@ -56,7 +67,9 @@ Example usage: ./hbi-axe.py -l username
 ```
 
 If you face any kind of issue on the procedure above, please proceed with the steps below in order to create a virtual environment and execute it.
-## ## End Attention Point
+
+[back to top](#hbi-axe)
+## running_with_venv
 
 First, let's create the virtual environment using python 3.6
 ```
@@ -108,7 +121,7 @@ user-account-here's password:
 ############################################################
 ### Red Hat/SysMgmt/CEE
 
-User ....: user-account-here
+User ....: rhn-support-wpinheir
 Status ..: Not loaded yet
 
 1. Load the data from cloud.redhat.com
@@ -116,12 +129,15 @@ Status ..: Not loaded yet
 3. List Servers with different `display_name` and `Hostname`
 4. List Server with Last_Seen > X days
 5. List all the Hypervisors with at least 1 guest
-
+9. Remove entries on cloud.redhat.com
 
 0. Exit
 ############################################################
 Please, type the # related to your request:
 ```
+
+[back to top](#hbi-axe)
+## some_outputs
 
 The initial step will be select 1 to load the information. At this moment, the app will connect to cloud.redhat.com using your credential and will collect the whole data about the servers from Inventory.
 
@@ -139,7 +155,7 @@ Status ..: Ready to go
 3. List Servers with different `display_name` and `Hostname`
 4. List Server with Last_Seen > X days
 5. List all the Hypervisors with at least 1 guest
-
+9. Remove entries on cloud.redhat.com
 
 0. Exit
 ############################################################
@@ -152,16 +168,14 @@ press any key to see the content of the file
 
 Below an example
 ```
-fqdn,id,last_seen
-(none),48a68387-8d8e-401d-b746-54d633544e8e,2021-05-26T00:37:20.301323+00:00
-(none),63b3c52d-479b-4019-9113-c30fba205bbe,2021-05-20T00:33:54.164677+00:00
-(none),8711d9e9-1cc1-43ba-b5da-faf1a88e67ee,2021-05-26T00:39:42.655086+00:00
-ansible,0d57e738-8f2c-4c0d-aa38-4214084d162d,2021-05-26T00:11:31.769515+00:00
-ansible,28bf2ab5-ce48-4291-9123-d0d3b7bfa9d4,2021-05-26T00:13:27.359815+00:00
-ansible,38c3670f-c56e-473b-a5ef-ea52aac83aab,2021-05-26T00:42:29.167919+00:00
-ansible-bastion,3f5a0952-2db9-4549-b69a-d2f433abd137,2021-05-24T00:31:41.294139+00:00
-ansible-bastion,aee52062-da4a-498e-83f2-8283e09cb09b,2021-05-26T00:09:40.373904+00:00
-ansible-bastion,e590b5c1-1b2b-42ac-91d4-1908a70dc705,2021-05-26T00:10:48.986680+00:00
+id,display_name,last_seen
+033519f3-2e29-4574-bad3-2cb9ea2714fd,561f7d69fec4a3b6eb3d0f5cb1967d92f35db8ba.example.com,2021-05-12T02:54:54.041303+00:00
+37b83eec-e15a-4620-943c-87ce2314f06a,561f7d69fec4a3b6eb3d0f5cb1967d92f35db8ba.example.com,2021-05-20T02:55:13.343192+00:00
+57614925-e980-4fe7-8288-b38819daa278,746916acb8efbd3f6b402326565c22ca46f7384d.example.com,2021-06-03T02:56:59.457510+00:00
+a2efc986-2012-4910-a620-7eaa89a1c0ac,746916acb8efbd3f6b402326565c22ca46f7384d.example.com,2021-06-07T02:57:00.555070+00:00
+678be3ac-dfa2-45f2-af76-fe8c17a23a1c,Fresh,2021-06-07T00:28:42.089450+00:00
+fdd11be4-2465-415e-8a75-f03e37017d18,Fresh,2021-06-03T00:10:23.462133+00:00
+...
 ```
 
 
@@ -178,7 +192,7 @@ Status ..: Ready to go
 3. List Servers with different `display_name` and `Hostname`
 4. List Server with Last_Seen > X days
 5. List all the Hypervisors with at least 1 guest
-
+9. Remove entries on cloud.redhat.com
 
 0. Exit
 ############################################################
@@ -190,12 +204,16 @@ press any key to see the content of the file
 ```
 Below an example
 ```
-display_name,fqdn,id
-00bb66d7-0142-40fb-a52c-f690358998e8,None,00bb66d7-0142-40fb-a52c-f690358998e8
-02269b27-52b1-4a33-88f3-fcf1e13ea200,None,02269b27-52b1-4a33-88f3-fcf1e13ea200
-1f6941ff-4b60-4741-aaf7-49f69fd3d194,vm25-187.gsslab.pnq2.redhat.com,1f6941ff-4b60-4741-aaf7-49f69fd3d194
-8530eefa-e5d4-425c-af2b-dd860bb93bd5,vm00-39.gsslab.pek2.redhat.com,8530eefa-e5d4-425c-af2b-dd860bb93bd5
-8cc90245-ecdf-4e3b-995b-165579826c29,srv-mrg-67,8cc90245-ecdf-4e3b-995b-165579826c29
+id,display_name,fqdn,last_seen
+006328f8-b3c3-4809-92b7-ecead62c9c15,dhcp16-225-6.fs.lab.eng.bos.redhat.com,smayhew-rhel8.fs.lab.eng.bos.redhat.com,2021-06-05T00:36:16.833456+00:00
+00bb66d7-0142-40fb-a52c-f690358998e8,00bb66d7-0142-40fb-a52c-f690358998e8,None,2021-06-07T00:28:44.293885+00:00
+014b7c22-f05a-4c73-91bd-910a46ea2932,starSRV,starSRV.eng.pek2.redhat.com,2021-06-07T17:47:15.811742+00:00
+02269b27-52b1-4a33-88f3-fcf1e13ea200,02269b27-52b1-4a33-88f3-fcf1e13ea200,None,2021-06-07T00:26:19.060785+00:00
+023a2c78-ceac-47d0-9395-171e030ab686,dhcp-1-181-206.sd.lab.cee.rdu2.redhat.com,rhdstest.testidmlaab.com,2021-06-07T00:33:51.587852+00:00
+026ed2e2-2ca1-4161-bbef-c13eed26235a,026ed2e2-2ca1-4161-bbef-c13eed26235a,None,2021-06-07T00:41:52.092614+00:00
+02a1576b-2b9e-4889-81a4-635285c1b18e,02a1576b-2b9e-4889-81a4-635285c1b18e,None,2021-06-07T00:40:48.314607+00:00
+02a45e42-fd8c-4ca4-b496-7c1057812481,stux79,stuxn82,2021-06-03T00:08:24.881861+00:00
+...
 ```
 
 `List Server with Last_Seen > X days` will present all the servers that `last_seen` or `last update` is greater than `X` days
@@ -211,7 +229,7 @@ Status ..: Ready to go
 3. List Servers with different `display_name` and `Hostname`
 4. List Server with Last_Seen > X days
 5. List all the Hypervisors with at least 1 guest
-
+9. Remove entries on cloud.redhat.com
 
 0. Exit
 ############################################################
@@ -224,11 +242,15 @@ press any key to see the content of the file
 ```
 Below an example
 ```
-display_name,id,last_seen
-(none),63b3c52d-479b-4019-9113-c30fba205bbe,2021-05-20 00:33:54
-020e9808f91dc65275038f429a1a3d521f4c1b67.example.com,9eb45929-8b33-4a61-8a33-41af52af03ed,2021-05-22 11:47:47
-02e4319a-04d8-4906-8572-f131a8294423,02e4319a-04d8-4906-8572-f131a8294423,2021-05-21 00:07:53
-10bb781b-d9c9-4866-86a4-068cc2bc23cc,10bb781b-d9c9-4866-86a4-068cc2bc23cc,2021-05-19 00:07:45
+id,display_name,last_seen
+e1365f3b-7821-4bae-a317-356d6a8ee7fb,rhel8.void,2021-06-06 12:53:59
+650b36df-ebb3-4b5a-a77c-a5e539108f6d,loadbalancer.openincite.net,2021-06-06 00:40:57
+1d435c45-0b0d-44a9-8e0e-858b04c65653,realm,2021-06-06 00:40:30
+0a5c8bca-b901-4a1e-8219-1c0dcd6dc9cb,crcqe-jenkins-slave-rhel79-48,2021-06-06 00:39:33
+32bce224-d6fb-4610-94f4-c3a20b38549d,lappy.redhat.lab.home,2021-06-06 00:39:33
+158ce088-f409-4f46-a06e-2414ca40f348,node1.openshift.local,2021-06-06 00:37:22
+6fd2ddb7-b45b-42a3-936e-9c8168492d73,rhel7.madebug.net,2021-06-06 00:37:21
+...
 ```
 
 `List all the Hypervisors with at least 1 guest` will present all the hypervisors that are presenting `host-guest mapping` and has at least 1 guest on top of it.
@@ -244,7 +266,7 @@ Status ..: Ready to go
 3. List Servers with different `display_name` and `Hostname`
 4. List Server with Last_Seen > X days
 5. List all the Hypervisors with at least 1 guest
-
+9. Remove entries on cloud.redhat.com
 
 0. Exit
 ############################################################
@@ -263,11 +285,67 @@ id,display_name,number_of_guests,number_of_sockets,last_seen
 64d4f02f-98ec-4a60-b8af-2fa1393be37a,virt-who-satotest.gsslab.brq2.redhat.com,100,2,2021-05-17T08:41:27.467423+00:00
 de59402d-94da-4cfb-ad49-5cfe2bdf676a,virt-who-titan.cluster.local-1,7,2,2021-04-21T12:55:29.371771+00:00
 6a33b34a-3ec0-4517-bcfd-9768a5bc436a,virt-who-fred.usersys.redhat.com-1,1,2,2021-04-20T23:57:31.767382+00:00
+...
 ```
 
+`Remove entries` on cloud.redhat.com will remove some entries based on a local file that will be specified by the customer
+```
+############################################################
+### Red Hat/SysMgmt/CEE
+
+User ....: rhn-support-wpinheir
+Status ..: Ready to go
+
+1. Load the data from cloud.redhat.com
+2. List Duplicate Entries on HBI
+3. List Servers with different `display_name` and `Hostname`
+4. List Server with Last_Seen > X days
+5. List all the Hypervisors with at least 1 guest
+9. Remove entries on cloud.redhat.com
+
+0. Exit
+############################################################
+Please, type the # related to your request: 9
+## This section will allow you to remove some entries on cloud.redhat.com
+In order to proceed, you can inform the file which contain the entries that you would like to remove.
+Note, you can use the files generated by the previous entries, edit to keep the entries that you would
+like to remove. If you would like to remove all the entries from the file, just keep the file as is.
+press any key to continue
+
+Would you like to proceed now? (Y/N): y
+Please, type the file path: /tmp/hbi_server_to_be_removed
+Are you sure that you would like to proceed? (Y/N): y
+
+The file /tmp/hbi_deleted_entries.csv was created with the deleted entries of your environment.
+Were deleted 4 entries from your environment.
+press any key to see the content of the file
+```
+Here is the content of `/tmp/hbi_server_to_be_removed`
+```
+$ cat /tmp/hbi_server_to_be_removed 
+id,display_name,fqdn,last_seen
+cfe80122-9e32-46bb-9b57-821d5a34fe85,srv01.example.com,03 Jun 2021 19:24 UTC
+b4038a36-8987-456d-819c-0d2b5bd72759,srv02.example.com,03 Jun 2021 19:24 UTC
+```
+
+And below an example of the output
+```
+$ cat /tmp/hbi_deleted_entries.csv
+uuid,Removed,status_code
+cfe80122-9e32-46bb-9b57-821d5a34fe85,False,404
+b4038a36-8987-456d-819c-0d2b5bd72759,True,202
+```
+Note. Above we can see some servers that weren't removed `404` because they are not present anymore and also we can see `202`, on this case the entry was removed successfuly.
+
+
+
+[back to top](#hbi-axe)
+## contact_here
 
 I really hope this helps you.
 
 If you need anything else of if you are facing issues trying to use it, please let me know.
 
 waldirio@redhat.com / waldirio@gmail.com
+
+[back to top](#hbi-axe)
